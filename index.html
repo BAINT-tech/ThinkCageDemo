@@ -2,19 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ThinkCage Demo</title>
+  <title>ThinkCage Chat Demo</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>ThinkCage 🧠 Reasoning AI</h1>
+  <div class="chat-container">
+    <header>
+      <div class="ai-avatar"></div>
+      <h1>ThinkCage 🧠</h1>
+    </header>
 
-    <div class="input-area">
-      <textarea id="userInput" placeholder="Type your question here..."></textarea>
-      <button onclick="askAI()">Start Reasoning</button>
+    <div id="chat-window" class="chat-window">
+      <!-- Messages will appear here -->
     </div>
 
-    <div id="output"></div>
+    <div class="input-area">
+      <input id="userInput" type="text" placeholder="Type your question here..." />
+      <button onclick="sendMessage()">Start Reasoning</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
