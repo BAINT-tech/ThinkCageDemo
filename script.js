@@ -1,14 +1,21 @@
-function askAI() {
-    const userInput = document.getElementById("userInput").value.trim();
-    const outputDiv = document.getElementById("output");
+function sendMessage() {
+    const input = document.getElementById("userInput");
+    const chatWindow = document.getElementById("chat-window");
+    const text = input.value.trim();
 
-    if (!userInput) {
-        alert("Please type a question for ThinkCage!");
-        return;
-    }
+    if (!text) return;
 
-    // Simulated AI steps for demo (replace with real API later)
-    const demoSteps = [
+    // Add user message
+    const userMsg = document.createElement("div");
+    userMsg.classList.add("message", "user-msg");
+    userMsg.textContent = text;
+    chatWindow.appendChild(userMsg);
+
+    input.value = "";
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+
+    // Simulated AI response with step-by-step reasoning
+    const steps = [
         "Identify your goal: Build and post your demo.",
         "Choose platforms: Instagram and Twitter.",
         "Prepare content: Screenshot the AI interface and captions.",
@@ -16,11 +23,25 @@ function askAI() {
         "Observe and adjust: Improve your next demo."
     ];
 
-    // Generate HTML for each step
-    outputDiv.innerHTML = demoSteps.map(step => `
-        <div class="step">
-            <div class="step-icon"></div>
-            ${step}
-        </div>
-    `).join('');
+    const aiMsg = document.createElement("div");
+    aiMsg.classList.add("message", "ai-msg");
+
+    steps.forEach(step => {
+        const stepDiv = document.createElement("div");
+        stepDiv.classList.add("step-card");
+
+        const icon = document.createElement("div");
+        icon.classList.add("step-icon");
+
+        const stepText = document.createElement("div");
+        stepText.textContent = step;
+
+        stepDiv.appendChild(icon);
+        stepDiv.appendChild(stepText);
+
+        aiMsg.appendChild(stepDiv);
+    });
+
+    chatWindow.appendChild(aiMsg);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
 }
