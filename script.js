@@ -1,8 +1,13 @@
 function askAI() {
-    const userInput = document.getElementById("userInput").value;
+    const userInput = document.getElementById("userInput").value.trim();
     const outputDiv = document.getElementById("output");
 
-    // Simulated AI response for demo
+    if (!userInput) {
+        alert("Please type a question for ThinkCage!");
+        return;
+    }
+
+    // Simulated AI steps for demo (replace with real API later)
     const demoSteps = [
         "Identify your goal: Build and post your demo.",
         "Choose platforms: Instagram and Twitter.",
@@ -11,10 +16,10 @@ function askAI() {
         "Observe and adjust: Improve your next demo."
     ];
 
-    // Create HTML for each step with glowing brain icon
+    // Generate HTML for each step
     outputDiv.innerHTML = demoSteps.map(step => `
-        <div class='step'>
-            <div class='step-icon'></div>
+        <div class="step">
+            <div class="step-icon"></div>
             ${step}
         </div>
     `).join('');
