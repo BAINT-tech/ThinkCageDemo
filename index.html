@@ -11,22 +11,19 @@
   <!-- TOP BAR -->
   <header class="top-bar">
     <div class="logo">🧠 ThinkCage</div>
-    <select class="language">
-      <option>🇳🇬 Pidgin</option>
-      <option>🇬🇧 English</option>
+    <select class="language" id="languageSelect">
+      <option value="pidgin">🇳🇬 Pidgin</option>
+      <option value="english">🇬🇧 English</option>
     </select>
   </header>
 
-  <!-- CHAT -->
+  <!-- CHAT AREA -->
   <main class="chat-area" id="chatArea"></main>
 
   <!-- INPUT -->
   <footer class="input-bar">
-    <input
-      id="userInput"
-      type="text"
-      placeholder="Type your message..."
-    />
+    <button class="mic-btn" id="micBtn" onclick="startMic()">🎤</button>
+    <input id="userInput" type="text" placeholder="Type or speak..." />
     <button onclick="sendMessage()">➤</button>
   </footer>
 
