@@ -1,68 +1,75 @@
-function detectLanguage(text) {
-    const pidginWords = ["go", "dem", "how", "I go", "make"];
-    return pidginWords.some(word => text.toLowerCase().includes(word)) ? "Pidgin" : "English";
-}
+function sendMessage() {
+  const input = document.getElementById("userInput");
+  const chat = document.getElementById("chatArea");
+  const text = input.value.trim();
+  if (!text) return;
 
-async function sendMessage() {
-    const input = document.getElementById("userInput");
-    const chatWindow = document.getElementById("chat-window");
-    const text = input.value.trim();
-    if (!text) return;
+  // User message
+  const userMsg = document.createElement("div");
+  userMsg.className = "user-message";
+  userMsg.textContent = text;
+  chat.appendChild(userMsg);
 
-    // Add user message
-    const userMsg = document.createElement("div");
-    userMsg.classList.add("message", "user-msg");
-    userMsg.textContent = text;
-    chatWindow.appendChild(userMsg);
-    input.value = "";
-    chatWindow.scrollTop = chatWindow.scrollHeight;
+  input.value = "";
+  chat.scrollTop = chat.scrollHeight;
 
-    // Add AI container
-    const aiMsg = document.createElement("div");
-    aiMsg.classList.add("message", "ai-msg");
-    chatWindow.appendChild(aiMsg);
+  // AI response container
+  const ai = document.createElement("div");
+  ai.className = "ai-container";
+  chat.appendChild(ai);
 
-    // Typing indicator
-    const typing = document.createElement("div");
-    typing.textContent = "ThinkCage is reasoning...";
-    typing.style.fontStyle = "italic";
-    aiMsg.appendChild(typing);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
+  // Intro
+  const intro = document.createElement("p");
+  intro.className = "ai-intro";
+  intro.textContent =
+    "Sure! Make we reason together, here's how you go plan your project:";
+  ai.appendChild(intro);
 
-    try {
-        const res = await fetch("/api/ask", {
-            method: "POST",
-            body: JSON.stringify({ question: text })
-        });
-        const data = await res.json();
-        aiMsg.removeChild(typing);
-
-        // Animate each step
-        let i = 0;
-        function showStep() {
-            if (i >= data.steps.length) return;
-
-            const stepDiv = document.createElement("div");
-            stepDiv.classList.add("step-card");
-
-            const icon = document.createElement("div");
-            icon.classList.add("step-icon");
-
-            const stepText = document.createElement("div");
-            stepText.textContent = data.steps[i];
-
-            stepDiv.appendChild(icon);
-            stepDiv.appendChild(stepText);
-            aiMsg.appendChild(stepDiv);
-
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-            i++;
-            setTimeout(showStep, 800);
-        }
-
-        showStep();
-    } catch (err) {
-        aiMsg.textContent = "Error: Could not reach AI.";
-        console.error(err);
+  // Fake steps (replace with backend later)
+  const steps = [
+    {
+      title: "Step 1: Identify Your Goal",
+      content: "Wetin you wan achieve? Build and post demo"
+    },
+    {
+      title: "Step 2: Select Distribution Channel",
+      content: ["Instagram", "Twitter"]
+    },
+    {
+      title: "Step 3: Post One Demo",
+      content: "Post your demo first, see how pipo go react"
+    },
+    {
+      title: "Step 4: Observe, Learn, Repeat",
+      content: "Watch reaction, adjust next demo, repeat winning move"
     }
+  ];
+
+  steps.forEach((step, i) => {
+    setTimeout(() => {
+      const card = document.createElement("div");
+      card.className = "step-card";
+
+      const h3 = document.createElement("h3");
+      h3.textContent = step.title;
+      card.appendChild(h3);
+
+      if (Array.isArray(step.content)) {
+        const ul = document.createElement("ul");
+        step.content.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          ul.appendChild(li);
+        });
+        card.appendChild(ul);
+      } else {
+        const p = document.createElement("p");
+        p.textContent = step.content;
+        card.appendChild(p);
+      }
+
+      ai.appendChild(card);
+      chat.scrollTop = chat.scrollHeight;
+    }, i * 500);
+  });
 }
