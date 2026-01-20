@@ -1,7 +1,10 @@
-function sendMessage() {
+// =======================
+// SEND MESSAGE FUNCTION
+// =======================
+function sendMessage(textInput = null) {
   const input = document.getElementById("userInput");
   const chat = document.getElementById("chatArea");
-  const text = input.value.trim();
+  const text = textInput || input.value.trim();
   if (!text) return;
 
   // USER MESSAGE
@@ -24,6 +27,7 @@ function sendMessage() {
     "Sure! Make we reason together, here’s how you go plan your project:";
   ai.appendChild(intro);
 
+  // AI Steps
   const steps = [
     {
       title: "Step 1: Identify Your Goal",
@@ -43,6 +47,7 @@ function sendMessage() {
     }
   ];
 
+  // Display steps with animation and TTS
   steps.forEach((step, i) => {
     setTimeout(() => {
       const card = document.createElement("div");
@@ -68,11 +73,21 @@ function sendMessage() {
 
       ai.appendChild(card);
       chat.scrollTop = chat.scrollHeight;
-    }, i * 350);
+
+      // =======================
+      // TEXT-TO-SPEECH
+      // =======================
+      const utterance = new SpeechSynthesisUtterance();
+      utterance.text = Array.isArray(step.content) ? step.content.join(", ") : step.content;
+      utterance.lang = "en-US"; // You can adjust for Pidgin-friendly
+      window.speechSynthesis.speak(utterance);
+    }, i * 400);
   });
 }
 
-// MIC + LANGUAGE SWITCH
+// =======================
+// MIC + LANGUAGE + AUTO SEND
+// =======================
 function startMic() {
   if (!("webkitSpeechRecognition" in window)) {
     alert("Mic no dey supported for this browser");
@@ -81,19 +96,19 @@ function startMic() {
 
   const micBtn = document.getElementById("micBtn");
   const langSelect = document.getElementById("languageSelect");
+  const input = document.getElementById("userInput");
 
   const recognition = new webkitSpeechRecognition();
-
   recognition.lang = langSelect.value === "pidgin" ? "en-NG" : "en-US";
   recognition.interimResults = false;
   recognition.continuous = false;
 
-  // Mic UI animation
+  // Mic animation
   micBtn.classList.add("listening");
 
   recognition.onresult = function (event) {
     const transcript = event.results[0][0].transcript;
-    document.getElementById("userInput").value = transcript;
+    input.value = transcript;
   };
 
   recognition.onerror = function () {
@@ -102,6 +117,10 @@ function startMic() {
 
   recognition.onend = function () {
     micBtn.classList.remove("listening");
+    if (input.value.trim()) {
+      // Auto-send after speaking
+      sendMessage(input.value.trim());
+    }
   };
 
   recognition.start();
