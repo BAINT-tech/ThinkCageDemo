@@ -1,24 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>ThinkCage Chat Demo</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>ThinkCage</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="chat-container">
-    <header>
-      <div class="ai-avatar"></div>
-      <h1>ThinkCage 🧠</h1>
-    </header>
 
-    <div id="chat-window" class="chat-window"></div>
-
-    <div class="input-area">
-      <input id="userInput" type="text" placeholder="Type your question here..." />
-      <button onclick="sendMessage()">Start Reasoning</button>
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="logo">
+      🧠 <span>ThinkCage</span>
     </div>
-  </div>
+
+    <select class="language">
+      <option value="pidgin">🇳🇬 Pidgin</option>
+      <option value="english">🇬🇧 English</option>
+    </select>
+  </header>
+
+  <!-- CHAT AREA -->
+  <main class="chat-area" id="chatArea">
+    <!-- Messages injected by JS -->
+  </main>
+
+  <!-- INPUT -->
+  <footer class="input-bar">
+    <input
+      id="userInput"
+      type="text"
+      placeholder="Type your message..."
+    />
+    <button onclick="sendMessage()">➤</button>
+  </footer>
 
   <script src="script.js"></script>
 </body>
