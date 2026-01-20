@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
 }
 
 body {
@@ -10,96 +10,100 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  line-height: 1.35;
 }
 
 /* TOP BAR */
 .top-bar {
+  height: 52px;
+  padding: 8px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 20px;
-  background: rgba(10, 20, 40, 0.6);
+  background: rgba(10, 20, 40, 0.7);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .logo {
-  font-size: 18px;
   font-weight: 600;
+  font-size: 16px;
 }
 
 .language {
   background: #0d2b4f;
   color: #fff;
   border: none;
-  padding: 6px 10px;
+  padding: 4px 8px;
   border-radius: 8px;
 }
 
 /* CHAT */
 .chat-area {
   flex: 1;
-  padding: 24px;
+  padding: 14px 16px;
   overflow-y: auto;
 }
 
 /* USER MESSAGE */
 .user-message {
-  align-self: flex-end;
   max-width: 70%;
+  margin-left: auto;
+  margin-bottom: 12px;
   background: linear-gradient(135deg, #1e90ff, #4fc3ff);
   color: #001018;
-  padding: 14px 18px;
-  border-radius: 18px 18px 4px 18px;
-  margin-bottom: 16px;
-  font-weight: 500;
+  padding: 10px 14px;
+  border-radius: 16px 16px 4px 16px;
+  font-size: 14px;
 }
 
 /* AI CONTAINER */
 .ai-container {
-  max-width: 90%;
+  max-width: 95%;
   background: rgba(8, 20, 45, 0.65);
-  border-radius: 18px;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 14px;
   border: 1px solid rgba(120,180,255,0.15);
-  box-shadow: 0 0 25px rgba(80,140,255,0.15);
+  box-shadow: 0 0 20px rgba(80,140,255,0.12);
 }
 
 .ai-intro {
-  margin-bottom: 18px;
+  margin-bottom: 12px;
   opacity: 0.9;
+  font-size: 14px;
 }
 
 /* STEP CARD */
 .step-card {
   background: rgba(10, 35, 70, 0.7);
-  border-radius: 14px;
-  padding: 16px 18px;
-  margin-bottom: 14px;
-  border-left: 4px solid #4fc3ff;
-  animation: fadeUp 0.4s ease forwards;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border-left: 3px solid #4fc3ff;
+  animation: fadeUp 0.25s ease forwards;
 }
 
 .step-card h3 {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   color: #7fd4ff;
-  font-size: 16px;
+  font-size: 14px;
 }
 
-.step-card p, .step-card li {
-  margin: 0;
+.step-card p,
+.step-card li {
+  font-size: 13px;
   opacity: 0.9;
 }
 
 .step-card ul {
-  margin: 6px 0 0;
-  padding-left: 18px;
+  margin: 4px 0 0;
+  padding-left: 16px;
 }
 
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -107,31 +111,31 @@ body {
   }
 }
 
-/* INPUT */
+/* INPUT BAR */
 .input-bar {
+  padding: 8px 12px;
   display: flex;
-  padding: 14px;
-  background: rgba(5, 15, 30, 0.8);
+  background: rgba(5, 15, 30, 0.85);
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 
 .input-bar input {
   flex: 1;
-  padding: 14px;
-  border-radius: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
   border: none;
   outline: none;
   background: #0c2445;
-  color: white;
-  font-size: 15px;
+  color: #fff;
+  font-size: 14px;
 }
 
 .input-bar button {
-  margin-left: 10px;
-  padding: 0 18px;
-  border-radius: 14px;
+  margin-left: 8px;
+  padding: 0 14px;
+  border-radius: 12px;
   border: none;
-  font-size: 18px;
   background: linear-gradient(135deg, #4fc3ff, #1e90ff);
+  font-size: 16px;
   cursor: pointer;
 }
