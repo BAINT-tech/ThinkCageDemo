@@ -71,3 +71,38 @@ function sendMessage() {
     }, i * 350);
   });
 }
+
+// MIC + LANGUAGE SWITCH
+function startMic() {
+  if (!("webkitSpeechRecognition" in window)) {
+    alert("Mic no dey supported for this browser");
+    return;
+  }
+
+  const micBtn = document.getElementById("micBtn");
+  const langSelect = document.getElementById("languageSelect");
+
+  const recognition = new webkitSpeechRecognition();
+
+  recognition.lang = langSelect.value === "pidgin" ? "en-NG" : "en-US";
+  recognition.interimResults = false;
+  recognition.continuous = false;
+
+  // Mic UI animation
+  micBtn.classList.add("listening");
+
+  recognition.onresult = function (event) {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById("userInput").value = transcript;
+  };
+
+  recognition.onerror = function () {
+    micBtn.classList.remove("listening");
+  };
+
+  recognition.onend = function () {
+    micBtn.classList.remove("listening");
+  };
+
+  recognition.start();
+}
