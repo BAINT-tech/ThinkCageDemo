@@ -1,13 +1,17 @@
-// =======================
+// GLOBAL VARIABLES
+const input = document.getElementById("userInput");
+const chat = document.getElementById("chatArea");
+const micBtn = document.getElementById("micBtn");
+const langSelect = document.getElementById("languageSelect");
+
+let userId = localStorage.getItem("thinkcageUserId") || "user_" + Math.floor(Math.random() * 100000);
+localStorage.setItem("thinkcageUserId", userId);
+
 // SEND MESSAGE FUNCTION
-// =======================
-function sendMessage(textInput = null) {
-  const input = document.getElementById("userInput");
-  const chat = document.getElementById("chatArea");
+async function sendMessage(textInput = null, provider = "openai") {
   const text = textInput || input.value.trim();
   if (!text) return;
 
-  // USER MESSAGE
   const userMsg = document.createElement("div");
   userMsg.className = "user-message";
   userMsg.textContent = text;
@@ -16,94 +20,52 @@ function sendMessage(textInput = null) {
   input.value = "";
   chat.scrollTop = chat.scrollHeight;
 
-  // AI CONTAINER
-  const ai = document.createElement("div");
-  ai.className = "ai-container";
-  chat.appendChild(ai);
+  try {
+    const res = await fetch("http://localhost:3000/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, question: text, provider })
+    });
+    const data = await res.json();
 
-  const intro = document.createElement("div");
-  intro.className = "ai-intro";
-  intro.textContent =
-    "Sure! Make we reason together, here’s how you go plan your project:";
-  ai.appendChild(intro);
+    displayAIAnswer(data.answer);
 
-  // AI Steps
-  const steps = [
-    {
-      title: "Step 1: Identify Your Goal",
-      content: "Wetin you wan achieve? Build and post demo"
-    },
-    {
-      title: "Step 2: Select Distribution Channel",
-      content: ["Instagram", "Twitter"]
-    },
-    {
-      title: "Step 3: Post One Demo",
-      content: "Post demo first, see how pipo go react"
-    },
-    {
-      title: "Step 4: Observe, Learn, Repeat",
-      content: "Watch reaction, adjust next demo, repeat winning move"
-    }
-  ];
-
-  // Display steps with animation and TTS
-  steps.forEach((step, i) => {
-    setTimeout(() => {
-      const card = document.createElement("div");
-      card.className = "step-card";
-
-      const h3 = document.createElement("h3");
-      h3.textContent = step.title;
-      card.appendChild(h3);
-
-      if (Array.isArray(step.content)) {
-        const ul = document.createElement("ul");
-        step.content.forEach(item => {
-          const li = document.createElement("li");
-          li.textContent = item;
-          ul.appendChild(li);
-        });
-        card.appendChild(ul);
-      } else {
-        const p = document.createElement("p");
-        p.textContent = step.content;
-        card.appendChild(p);
-      }
-
-      ai.appendChild(card);
-      chat.scrollTop = chat.scrollHeight;
-
-      // =======================
-      // TEXT-TO-SPEECH
-      // =======================
-      const utterance = new SpeechSynthesisUtterance();
-      utterance.text = Array.isArray(step.content) ? step.content.join(", ") : step.content;
-      utterance.lang = "en-US"; // You can adjust for Pidgin-friendly
-      window.speechSynthesis.speak(utterance);
-    }, i * 400);
-  });
+  } catch (err) {
+    console.error(err);
+    displayAIAnswer("Omo, something no go well. Try again.");
+  }
 }
 
-// =======================
+// DISPLAY AI ANSWER
+function displayAIAnswer(answer) {
+  const aiContainer = document.createElement("div");
+  aiContainer.className = "ai-container";
+
+  const stepCard = document.createElement("div");
+  stepCard.className = "step-card";
+  stepCard.textContent = answer;
+  aiContainer.appendChild(stepCard);
+  chat.appendChild(aiContainer);
+
+  chat.scrollTop = chat.scrollHeight;
+
+  const utterance = new SpeechSynthesisUtterance(answer);
+  utterance.lang = langSelect.value === "pidgin" ? "en-NG" : "en-US";
+  window.speechSynthesis.speak(utterance);
+}
+
 // MIC + LANGUAGE + AUTO SEND
-// =======================
-function startMic() {
+function startMic(provider = "openai") {
   if (!("webkitSpeechRecognition" in window)) {
     alert("Mic no dey supported for this browser");
     return;
   }
-
-  const micBtn = document.getElementById("micBtn");
-  const langSelect = document.getElementById("languageSelect");
-  const input = document.getElementById("userInput");
 
   const recognition = new webkitSpeechRecognition();
   recognition.lang = langSelect.value === "pidgin" ? "en-NG" : "en-US";
   recognition.interimResults = false;
   recognition.continuous = false;
 
-  // Mic animation
   micBtn.classList.add("listening");
 
   recognition.onresult = function (event) {
@@ -111,17 +73,21 @@ function startMic() {
     input.value = transcript;
   };
 
-  recognition.onerror = function () {
-    micBtn.classList.remove("listening");
-  };
-
+  recognition.onerror = function () { micBtn.classList.remove("listening"); };
   recognition.onend = function () {
     micBtn.classList.remove("listening");
-    if (input.value.trim()) {
-      // Auto-send after speaking
-      sendMessage(input.value.trim());
-    }
+    if (input.value.trim()) sendMessage(input.value.trim(), provider);
   };
 
   recognition.start();
 }
+
+// EVENT LISTENERS
+micBtn.addEventListener("click", () => startMic("openai"));
+input.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(input.value.trim(), "openai"); });
+document.querySelectorAll(".provider-btn")?.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const provider = btn.dataset.provider;
+    if (input.value.trim()) sendMessage(input.value.trim(), provider);
+  });
+});
