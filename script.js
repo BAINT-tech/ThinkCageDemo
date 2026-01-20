@@ -4,7 +4,7 @@ function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
 
-  // User message
+  // USER MESSAGE
   const userMsg = document.createElement("div");
   userMsg.className = "user-message";
   userMsg.textContent = text;
@@ -13,19 +13,17 @@ function sendMessage() {
   input.value = "";
   chat.scrollTop = chat.scrollHeight;
 
-  // AI response container
+  // AI CONTAINER
   const ai = document.createElement("div");
   ai.className = "ai-container";
   chat.appendChild(ai);
 
-  // Intro
-  const intro = document.createElement("p");
+  const intro = document.createElement("div");
   intro.className = "ai-intro";
   intro.textContent =
-    "Sure! Make we reason together, here's how you go plan your project:";
+    "Sure! Make we reason together, here’s how you go plan your project:";
   ai.appendChild(intro);
 
-  // Fake steps (replace with backend later)
   const steps = [
     {
       title: "Step 1: Identify Your Goal",
@@ -37,7 +35,7 @@ function sendMessage() {
     },
     {
       title: "Step 3: Post One Demo",
-      content: "Post your demo first, see how pipo go react"
+      content: "Post demo first, see how pipo go react"
     },
     {
       title: "Step 4: Observe, Learn, Repeat",
@@ -70,6 +68,6 @@ function sendMessage() {
 
       ai.appendChild(card);
       chat.scrollTop = chat.scrollHeight;
-    }, i * 500);
+    }, i * 350);
   });
 }
